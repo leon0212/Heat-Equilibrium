@@ -4,7 +4,7 @@ var liqcolor,solcolor;
 var shtext,shmtext;
 var boilpt;
 var flame;
-var templ;
+var templ,tempf;
 var running;
 var ssize;
 var metal;
@@ -20,7 +20,7 @@ function setup() {
   aSlider.mouseReleased(filler);
   aSlider.class("sim-slider");
   
-  abSlider = createSlider(30,70,40);
+  abSlider = createSlider(5,30,10);
   abSlider.position(480, 220);
   abSlider.mousePressed(filler);
   abSlider.mouseReleased(filler);
@@ -79,8 +79,8 @@ background('lightgray');
   text("Mass of Item (kg)",477,216);
   text("Temperature of Liquid (C)",7,286);
     text("Temperature of Item (C)",477,286);
-  text("Specific Heat: ",220,395);
-  text(shtext+" J/kgC ",320,395);
+  text("Specific Heat: ",10,600);
+  text(shtext+" J/kgC ",105,600);
   text(shmtext+" J/kgC ",477,600);
   text( tempWSlider.value()+"C ",160,317);
   text( tempiSlider.value()+"C ",440,317);
@@ -100,10 +100,17 @@ background('lightgray');
 if (flame==true){
 drawFlame();
 
-Q=(aSlider.value()*shtext*(templ-tempWSlider.value()));
+tempf=((aSlider.value()*shtext*tempWSlider.value())+(abSlider.value()*shmtext*tempiSlider.value()))/
+	((aSlider.value()*shtext)+(abSlider.value()*shmtext))
 
+textSize(15);	
+text("Place solid into the liquid.",150,130);
+
+if(mouseX>230 && mouseX<410 && mouseY>ypos && mouseY< (ypos + ySize)){;
 textSize(35);
-text(Q+" J",7,650);
+text("Equilibrium (Final Temp)",7,730);
+text(int(tempf)+" C",7,680);
+}
 }
 
 
@@ -119,7 +126,7 @@ rectMode(CORNER);
   rect(230,ypos,180,ySize);
 if (metal==true){
   rectMode(CENTER);
-  ssize = abSlider.value();
+  ssize = abSlider.value()*2;
   fill(solcolor);
   rect(mouseX,mouseY,ssize,ssize	);
   rectMode(CORNER);
@@ -146,19 +153,17 @@ ypos=400;
 
 if (radioVert.value() == '#A8D9ED') {
 shtext=4186;
-boilpt=100+ "C (Boiling Point)";
+
 
 }
 
 if (radioVert.value() == '#E6E0A8') {
 shtext=1970;
-boilpt=207+"C (Smoking Point)";
 
 }
 
 if (radioVert.value() == '#C4C4C4') {
 shtext=140;
-boilpt=357 + "C (Boiling Point)";
 
 }
 ///////////////////////////////////////  
@@ -166,6 +171,7 @@ boilpt=357 + "C (Boiling Point)";
 if (radio2Vert.value() == '#A1A5A6') {
 shmtext=450;
 metal=true;
+
 
 }
 
@@ -178,6 +184,7 @@ metal=true;
 if (radio2Vert.value() == '#DEB100') {
 shmtext=390;
 metal=true;
+	
 
 }
   
